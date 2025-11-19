@@ -44,10 +44,15 @@ public class TodoController {
 
     @GetMapping("/{id}")
     public String detail(@PathVariable Long id, Model model) {
-        TodoDto todo = todoRepository.findById(id);
-        model.addAttribute("todo", todo);
+        try {
+            TodoDto todo = todoRepository.findById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("not found"));
+            model.addAttribute("todo", todo);
 
-        return "detail";
+            return "detail";
+        } catch (IllegalArgumentException e) {
+            return "redirect:/todos";
+        }
     }
 
     @GetMapping("/{id}/delete")
@@ -59,23 +64,32 @@ public class TodoController {
 
     @GetMapping("/{id}/edit")
     public String edit(@PathVariable Long id, Model model) {
-        TodoDto todo = todoRepository.findById(id);
-        model.addAttribute("todo", todo);
+        try {
+            TodoDto todo = todoRepository.findById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("not found"));
+            model.addAttribute("todo", todo);
 
-        return "edit";
+            return "edit";
+        } catch (IllegalArgumentException e) {
+            return "redirect:/todos";
+        }
     }
 
     @GetMapping("/{id}/update")
-    public String edit(@PathVariable Long id, @RequestParam String title, @RequestParam String content,
-                       @RequestParam(defaultValue ="false") Boolean completed, Model model) {
-        TodoDto todo = todoRepository.findById(id);
+    public String edit(@PathVariable Long id, @RequestParam String title, @RequestParam String content, @RequestParam(defaultValue = "false") Boolean completed, Model model) {
+        try {
+            TodoDto todo = todoRepository.findById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("not found"));
 
-        todo.setTitle(title);
-        todo.setContent(content);
-        todo.setCompleted(completed);
-        todoRepository.save(todo);
+            todo.setTitle(title);
+            todo.setContent(content);
+            todo.setCompleted(completed);
+            todoRepository.save(todo);
 
-        return "redirect:/todos/" + id;
+            return "redirect:/todos/" + id;
+        } catch (IllegalArgumentException e) {
+            return "redirect:/todos";
+        }
 
     }
 }
