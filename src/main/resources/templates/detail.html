@@ -1,19 +1,30 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="http://www.thymeleaf.org">
-<head>
-	<meta charset="UTF-8">
-	<title>detail</title>
-</head>
-<body>
-	<h1>detail</h1>
-	<a href="/todos">home</a>
-	<hr>
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default}">
 
-	<h2 th:text="${todo.title}"></h2>
-	<h2 th:text="${todo.content}"></h2>
-	<p th:text="${todo.completed} ? '완료' : '미완료'"></p>
-	<a th:href="@{/todos/{id}/edit(id=${todo.id})}">edit</a>
-	<a th:href="@{/todos/{id}/delete(id=${todo.id})}">delete</a>
-</body>
+<div layout:fragment="content">
+    <div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md">
+        <div class="flex justify-between items-start mb-4">
+            <h1 class="text-3xl font-bold text-gray-800" th:text="${todo.title}"></h1>
+            <span th:if="${todo.completed}" class="px-3 py-1 text-sm font-semibold rounded-full bg-green-100 text-green-800">완료</span>
+            <span th:unless="${todo.completed}" class="px-3 py-1 text-sm font-semibold rounded-full bg-yellow-100 text-yellow-800">진행중</span>
+        </div>
+
+        <div class="prose max-w-none text-gray-600 mb-6">
+            <p th:text="${todo.content}"></p>
+        </div>
+
+        <div class="flex items-center justify-end space-x-4">
+            <a th:href="@{/todos/{id}/edit(id=${todo.id})}" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                수정
+            </a>
+            <a th:href="@{/todos/{id}/delete(id=${todo.id})}" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+               onclick="return confirm('정말로 삭제하시겠습니까?');">
+                삭제
+            </a>
+        </div>
+    </div>
+</div>
 </html>

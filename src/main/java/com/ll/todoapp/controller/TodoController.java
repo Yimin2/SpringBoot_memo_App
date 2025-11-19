@@ -90,6 +90,41 @@ public class TodoController {
         } catch (IllegalArgumentException e) {
             return "redirect:/todos";
         }
+    }
 
+    @GetMapping("/search")
+    public String search(@RequestParam String keyword, Model model) {
+        List<TodoDto> todos = todoRepository.findByTitleContaining(keyword);
+        model.addAttribute("todos", todos);
+        return "todos";
+    }
+
+    @GetMapping("/active")
+    public String active(Model model) {
+        List<TodoDto> todos = todoRepository.findByCompleted(false);
+        model.addAttribute("todos", todos);
+        return "todos";
+    }
+
+    @GetMapping("/completed")
+    public String completed(Model model) {
+        List<TodoDto> todos = todoRepository.findByCompleted(true);
+        model.addAttribute("todos", todos);
+        return "todos";
+    }
+
+    @GetMapping("/todos/{id}/toggle")
+    public String toggle(@PathVariable Long id, Model model) {
+        try {
+            TodoDto todo = todoRepository.findById(id)
+                    .orElseThrow(() -> new IllegalArgumentException("not found"));
+            todo.setCompleted(!todo.isCompleted());
+            todoRepository.save(todo);
+            return "redirect:/todos/" + id;
+        } catch (IllegalArgumentException e) {
+            return "redirect:/todos";
+        }
     }
 }
+
+

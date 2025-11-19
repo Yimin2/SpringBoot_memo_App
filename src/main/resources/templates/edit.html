@@ -1,22 +1,36 @@
 <!DOCTYPE html>
 <html lang="en"
-      xmlns:th="http://www.thymeleaf.org">
-<head>
-	<meta charset="UTF-8">
-	<title>edit</title>
-</head>
-<body>
-	<h1>edit</h1>
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default}">
 
-	<form th:action="@{/todos/{id}/update(id=${todo.id})}">
-		<input type="text"
-		       name="title"
-		       th:value="${todo.title}">
-		<input type="text"
-		       name="content"
-		       th:value="${todo.content}">
-		<input type="checkbox" name="completed" value="true" th:checked="${todo.completed}">
-		<input type="submit">
-	</form>
-</body>
+<div layout:fragment="content">
+    <div class="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-md">
+        <h1 class="text-2xl font-bold mb-6">할일 수정</h1>
+        <form th:action="@{/todos/{id}/update(id=${todo.id})}">
+            <div class="mb-4">
+                <label for="title" class="block text-gray-700 text-sm font-bold mb-2">제목</label>
+                <input type="text" id="title" name="title" th:value="${todo.title}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+            </div>
+            <div class="mb-6">
+                <label for="content" class="block text-gray-700 text-sm font-bold mb-2">내용</label>
+                <textarea id="content" name="content" rows="4" th:text="${todo.content}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></textarea>
+            </div>
+            <div class="mb-6">
+                <label class="block text-gray-700 text-sm font-bold mb-2">
+                    <input type="checkbox" name="completed" value="true" th:checked="${todo.completed}" class="mr-2 leading-tight">
+                    <span class="text-sm">
+                        완료
+                    </span>
+                </label>
+            </div>
+            <div class="flex items-center justify-between">
+                <input type="submit" value="수정하기" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer">
+                <a th:href="@{/todos/{id}(id=${todo.id})}" class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
+                    취소
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
 </html>
