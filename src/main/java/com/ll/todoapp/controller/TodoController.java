@@ -5,10 +5,7 @@ import com.ll.todoapp.repogitory.TodoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -33,13 +30,12 @@ public class TodoController {
         return "new";
     }
 
-    @GetMapping("/create")
-    public String create(@RequestParam String title, @RequestParam String content, Model model) {
+    @PostMapping("/create")
+    public String create(@RequestParam String title, @RequestParam String content) {
         TodoDto todoDto = new TodoDto(null, title, content, false);
-        TodoDto todos = todoRepository.save(todoDto);
-        model.addAttribute("todos", todos);
+        todoRepository.save(todoDto);
 
-        return "create";
+        return "redirect:/todos";
     }
 
     @GetMapping("/{id}")
@@ -62,7 +58,7 @@ public class TodoController {
         return "redirect:/todos";
     }
 
-    @GetMapping("/{id}/edit")
+    @GetMapping("/{id}/update")
     public String edit(@PathVariable Long id, Model model) {
         try {
             TodoDto todo = todoRepository.findById(id)
@@ -75,8 +71,8 @@ public class TodoController {
         }
     }
 
-    @GetMapping("/{id}/update")
-    public String edit(@PathVariable Long id, @RequestParam String title, @RequestParam String content, @RequestParam(defaultValue = "false") Boolean completed, Model model) {
+    @PostMapping("/{id}/update")
+    public String update(@PathVariable Long id, @RequestParam String title, @RequestParam String content, @RequestParam(defaultValue = "false") Boolean completed) {
         try {
             TodoDto todo = todoRepository.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("not found"));
