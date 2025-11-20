@@ -15,7 +15,7 @@ public class TodoRepository {
     private Long nextId = 1L;
 
     public TodoDto save(TodoDto todo) {
-        if(todo.getId() == null) {
+        if (todo.getId() == null) {
             todo.setId(nextId++);
         }
 
@@ -37,14 +37,23 @@ public class TodoRepository {
     }
 
     public List<TodoDto> findByTitleContaining(String keyword) {
-        return storage.values().stream()
-                .filter((todoDto -> todoDto.getTitle().contains(keyword)))
+        return storage.values()
+                .stream()
+                .filter((todoDto -> todoDto.getTitle()
+                        .contains(keyword)))
                 .toList();
     }
 
     public List<TodoDto> findByCompleted(boolean completed) {
-        return storage.values().stream()
+        return storage.values()
+                .stream()
                 .filter(todoDto -> todoDto.isCompleted() == completed)
                 .toList();
+    }
+
+    public void deleteByCompletedTodos() {
+        storage.entrySet().removeIf(
+                item -> item.getValue().isCompleted()
+        );
     }
 }

@@ -67,12 +67,16 @@
 	</div>
 
 
-    <div class="bg-white p-4 rounded-lg shadow-md mb-4 mt-4">
+    <div class="bg-white p-4 rounded-lg shadow-md mb-4 mt-4 flex">
 	    <div class="join">
 		    <button class="btn join-item btn-ghost"><a href="/todos">전체</a></button>
+		    <span th:text="${totalCount}"></span>
 		    <button class="btn join-item btn-ghost"><a href="/todos/active">진행중</a></button>
+		    <span th:text="${activeCount}"></span>
 		    <button class="btn join-item btn-ghost"><a href="/todos/completed">완료</a></button>
+		    <span th:text="${completedCount}"></span>
 	    </div>
+	    <button class="btn btn-ghost"><a href="/todos/delete-completed">완료된 할일 삭제</a></button>
     </div>
 
     <div class="bg-white rounded-lg shadow-md">
