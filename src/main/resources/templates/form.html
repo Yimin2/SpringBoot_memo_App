@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html
+		lang="en"
+		xmlns:th="http://www.thymeleaf.org"
+		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		layout:decorate="~{layout/default}">
+
+<div layout:fragment="content">
+	<div class="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-md">
+		<h1 class="text-2xl font-bold mb-6" th:text="${todo.id == null} ? 'new':'update'"></h1>
+		<form
+				th:action="${todo.id == null} ? '/todos/create' : @{/todos/{id}/update(id=${todo.id})}"
+				method="post"
+				th:object="${todo}">
+			<div class="mb-4">
+				<label
+						for="title"
+						class="block text-gray-700 text-sm font-bold mb-2">제목</label>
+				<input
+						id="title"
+						class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+						placeholder="제목을 입력하세요"
+						th:field="*{title}">
+			</div>
+			<div class="mb-6">
+				<label
+						for="content"
+						class="block text-gray-700 text-sm font-bold mb-2">내용</label>
+				<textarea
+						id="content"
+						rows="4"
+						class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+						placeholder="내용을 입력하세요"
+						th:field="*{content}"></textarea>
+			</div>
+			<div th:if="${todo.id != null}">
+				<label class="block text-gray-700 text-sm font-bold mb-2">
+					<input
+							type="checkbox"
+							th:field="*{completed}"
+							class="mr-2 leading-tight">
+					<span class="text-sm">
+                        완료
+                    </span>
+				</label>
+			</div>
+			<div class="flex items-center justify-between">
+				<input
+						type="submit"
+						value="생성하기"
+						class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer"
+						th:field="*{title}">
+				<a
+						href="/todos"
+						class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
+					취소
+				</a>
+			</div>
+		</form>
+	</div>
+</div>
+</html>

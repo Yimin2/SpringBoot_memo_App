@@ -11,12 +11,68 @@
         <a href="/todos/new" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">새 할일 추가</a>
     </div>
 
-    <div class="bg-white p-4 rounded-lg shadow-md mb-4">
-        <div class="flex space-x-2 mb-4" role="group">
-            <a href="/todos" class="px-4 py-2 text-sm font-medium text-blue-700 bg-white border border-gray-200 rounded-l-lg hover:bg-gray-100">전체</a>
-            <a href="/todos/active" class="px-4 py-2 text-sm font-medium text-blue-700 bg-white border-t border-b border-gray-200 hover:bg-gray-100">진행중</a>
-            <a href="/todos/completed" class="px-4 py-2 text-sm font-medium text-blue-700 bg-white border border-gray-200 rounded-r-lg hover:bg-gray-100">완료</a>
-        </div>
+	<div th:if="${message}" role="alert" class="alert alert-success mb-4">
+		<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+		</svg>
+		<span th:text="${message}"></span>
+	</div>
+
+	<div class="hover-3d">
+		<!-- content -->
+		<figure class="w-60 rounded-2xl">
+			<img src="https://img.daisyui.com/images/stock/card-1.webp?x" alt="Tailwind CSS 3D card" />
+		</figure>
+		<!-- 8 empty divs needed for the 3D effect -->
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+	</div>
+
+	<div class="hover-3d">
+		<!-- content -->
+		<figure class="w-60 rounded-2xl">
+			<img src="https://img.daisyui.com/images/stock/card-2.webp?x" alt="Tailwind CSS 3D hover" />
+		</figure>
+		<!-- 8 empty divs needed for the 3D effect -->
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+	</div>
+
+	<div class="hover-3d">
+		<!-- content -->
+		<figure class="w-60 rounded-2xl">
+			<img src="https://img.daisyui.com/images/stock/card-3.webp?x" alt="Tailwind CSS 3D hover" />
+		</figure>
+		<!-- 8 empty divs needed for the 3D effect -->
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+		<div></div>
+	</div>
+
+
+    <div class="bg-white p-4 rounded-lg shadow-md mb-4 mt-4">
+	    <div class="join">
+		    <button class="btn join-item btn-ghost"><a href="/todos">전체</a></button>
+		    <button class="btn join-item btn-ghost"><a href="/todos/active">진행중</a></button>
+		    <button class="btn join-item btn-ghost"><a href="/todos/completed">완료</a></button>
+	    </div>
     </div>
 
     <div class="bg-white rounded-lg shadow-md">

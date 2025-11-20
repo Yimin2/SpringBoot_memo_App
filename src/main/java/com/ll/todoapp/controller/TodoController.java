@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -26,14 +27,16 @@ public class TodoController {
     }
 
     @GetMapping("/new")
-    public String newTodo() {
-        return "new";
+    public String newTodo(Model model) {
+        model.addAttribute("todo", new TodoDto());
+        return "form";
     }
 
     @PostMapping("/create")
-    public String create(@RequestParam String title, @RequestParam String content) {
-        TodoDto todoDto = new TodoDto(null, title, content, false);
+    public String create(RedirectAttributes redirectAttributes, @ModelAttribute TodoDto todo) {
+        TodoDto todoDto = new TodoDto(null, todo.getTitle(), todo.getContent(), false);
         todoRepository.save(todoDto);
+        redirectAttributes.addFlashAttribute("message", "메모가 생성되었습니다.");
 
         return "redirect:/todos";
     }
@@ -65,23 +68,17 @@ public class TodoController {
                     .orElseThrow(() -> new IllegalArgumentException("not found"));
             model.addAttribute("todo", todo);
 
-            return "edit";
+            return "form";
         } catch (IllegalArgumentException e) {
             return "redirect:/todos";
         }
     }
 
     @PostMapping("/{id}/update")
-    public String update(@PathVariable Long id, @RequestParam String title, @RequestParam String content, @RequestParam(defaultValue = "false") Boolean completed) {
+    public String update(@PathVariable Long id, @ModelAttribute TodoDto todo) {
         try {
-            TodoDto todo = todoRepository.findById(id)
-                    .orElseThrow(() -> new IllegalArgumentException("not found"));
-
-            todo.setTitle(title);
-            todo.setContent(content);
-            todo.setCompleted(completed);
+            todo.setId(id);
             todoRepository.save(todo);
-
             return "redirect:/todos/" + id;
         } catch (IllegalArgumentException e) {
             return "redirect:/todos";
