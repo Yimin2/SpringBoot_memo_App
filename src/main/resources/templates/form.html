@@ -1,62 +1,135 @@
 <!DOCTYPE html>
-<html
-		lang="en"
-		xmlns:th="http://www.thymeleaf.org"
-		xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-		layout:decorate="~{layout/default}">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/default}">
 
 <div layout:fragment="content">
-	<div class="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-md">
-		<h1 class="text-2xl font-bold mb-6" th:text="${todo.id == null} ? 'new':'update'"></h1>
-		<form
-				th:action="${todo.id == null} ? '/todos/create' : @{/todos/{id}/update(id=${todo.id})}"
-				method="post"
-				th:object="${todo}">
-			<div class="mb-4">
-				<label
-						for="title"
-						class="block text-gray-700 text-sm font-bold mb-2">제목</label>
-				<input
-						id="title"
-						class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-						placeholder="제목을 입력하세요"
-						th:field="*{title}">
+	<div class="max-w-2xl mx-auto animate-fade-in-up">
+		<!-- Modern Card Container -->
+		<div class="glass-strong rounded-3xl p-10 shadow-2xl border border-white/20">
+			<!-- Header with Icon and Title -->
+			<div class="text-center mb-10">
+				<div class="inline-block p-4 bg-gradient-primary rounded-2xl mb-4 shadow-lg">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-white" fill="none" viewBox="0 0 24 24"
+						stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+							d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+					</svg>
+				</div>
+				<h1 class="text-4xl font-black mb-2">
+					<span class="text-gradient-primary"
+						th:text="${todo.id == null} ? 'Create New Memo' : 'Update Memo'">Create New Memo</span>
+				</h1>
+				<p class="text-base-content/60 text-lg">
+					<span
+						th:text="${todo.id == null} ? 'Fill in the details to create your memo' : 'Edit your memo details below'"></span>
+				</p>
 			</div>
-			<div class="mb-6">
-				<label
-						for="content"
-						class="block text-gray-700 text-sm font-bold mb-2">내용</label>
-				<textarea
-						id="content"
-						rows="4"
-						class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-						placeholder="내용을 입력하세요"
-						th:field="*{content}"></textarea>
-			</div>
-			<div th:if="${todo.id != null}">
-				<label class="block text-gray-700 text-sm font-bold mb-2">
-					<input
-							type="checkbox"
-							th:field="*{completed}"
-							class="mr-2 leading-tight">
-					<span class="text-sm">
-                        완료
-                    </span>
-				</label>
-			</div>
-			<div class="flex items-center justify-between">
-				<input
-						type="submit"
-						value="생성하기"
-						class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline cursor-pointer"
-						th:field="*{title}">
-				<a
-						href="/todos"
-						class="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800">
-					취소
-				</a>
-			</div>
-		</form>
+
+			<!-- Modern Form -->
+			<form th:action="${todo.id == null} ? '/todos/create' : @{/todos/{id}/update(id=${todo.id})}" method="post"
+				th:object="${todo}" class="space-y-8">
+
+				<!-- Title Input with Floating Label -->
+				<div class="form-control">
+					<label class="label">
+						<span class="label-text font-semibold text-base flex items-center gap-2">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary" fill="none"
+								viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+									d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+							</svg>
+							Title
+						</span>
+					</label>
+					<input id="title" type="text"
+						class="input input-bordered input-lg rounded-2xl w-full focus:ring-2 focus:ring-primary/30 transition-all border-2"
+						placeholder="Enter a descriptive title..." th:field="*{title}" required>
+				</div>
+
+				<!-- Content Textarea with Floating Label -->
+				<div class="form-control">
+					<label class="label">
+						<span class="label-text font-semibold text-base flex items-center gap-2">
+							<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary" fill="none"
+								viewBox="0 0 24 24" stroke="currentColor">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+									d="M4 6h16M4 12h16M4 18h7" />
+							</svg>
+							Content
+						</span>
+					</label>
+					<textarea id="content" rows="6"
+						class="textarea textarea-bordered textarea-lg rounded-2xl w-full focus:ring-2 focus:ring-primary/30 transition-all border-2 leading-relaxed"
+						placeholder="Write your memo content here..." th:field="*{content}" required></textarea>
+					<label class="label">
+						<span class="label-text-alt text-base-content/50">Markdown supported</span>
+					</label>
+				</div>
+
+				<!-- Completion Toggle (Only for Edit Mode) -->
+				<div th:if="${todo.id != null}" class="form-control">
+					<div class="glass rounded-2xl p-6 border border-base-200/50">
+						<label class="label cursor-pointer justify-start gap-4">
+							<input type="checkbox" th:field="*{completed}" class="toggle toggle-success toggle-lg">
+							<div>
+								<span class="label-text font-bold text-lg block">Mark as Completed</span>
+								<span class="label-text-alt text-base-content/60">Toggle to mark this memo as
+									done</span>
+							</div>
+						</label>
+					</div>
+				</div>
+
+				<!-- Action Buttons -->
+				<div
+					class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-base-200/50">
+					<a href="/todos"
+						class="btn btn-ghost btn-lg gap-2 rounded-2xl hover:bg-base-200/50 transition-all order-2 sm:order-1 w-full sm:w-auto">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+							stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+								d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+						</svg>
+						Cancel
+					</a>
+					<button type="submit"
+						class="btn btn-lg btn-gradient gap-3 rounded-2xl shadow-xl hover:shadow-2xl hover:-translate-y-1 transition-all order-1 sm:order-2 w-full sm:w-auto">
+						<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+							stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+						</svg>
+						<span th:text="${todo.id == null} ? 'Create Memo' : 'Update Memo'">Create Memo</span>
+					</button>
+				</div>
+			</form>
+		</div>
+
+		<!-- Helper Tips Card -->
+		<div class="mt-8 glass rounded-2xl p-6 border border-primary/20 animate-fade-in" style="animation-delay: 0.2s;">
+			<h3 class="font-bold text-lg mb-3 flex items-center gap-2">
+				<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24"
+					stroke="currentColor">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+						d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+				</svg>
+				Quick Tips
+			</h3>
+			<ul class="space-y-2 text-sm text-base-content/70">
+				<li class="flex items-start gap-2">
+					<span class="text-primary mt-0.5">•</span>
+					<span>Use descriptive titles to easily identify your memos</span>
+				</li>
+				<li class="flex items-start gap-2">
+					<span class="text-primary mt-0.5">•</span>
+					<span>Add detailed content to keep all important information in one place</span>
+				</li>
+				<li class="flex items-start gap-2">
+					<span class="text-primary mt-0.5">•</span>
+					<span>Mark memos as completed when you're done with the task</span>
+				</li>
+			</ul>
+		</div>
 	</div>
 </div>
+
 </html>

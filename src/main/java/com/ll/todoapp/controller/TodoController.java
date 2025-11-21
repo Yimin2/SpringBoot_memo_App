@@ -1,7 +1,6 @@
 package com.ll.todoapp.controller;
 
 import com.ll.todoapp.dto.TodoDto;
-import com.ll.todoapp.repogitory.TodoRepository;
 import com.ll.todoapp.service.TodoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -38,27 +37,18 @@ public class TodoController {
 
     @PostMapping("/create")
     public String create(RedirectAttributes redirectAttributes, @ModelAttribute TodoDto todo) {
-        try {
-            TodoDto todoDto = new TodoDto(null, todo.getTitle(), todo.getContent(), false);
-            todoService.saveTodo(todoDto);
-            redirectAttributes.addFlashAttribute("message", "메모가 생성되었습니다.");
-            return "redirect:/todos";
-        } catch (IllegalArgumentException e) {
-            redirectAttributes.addFlashAttribute("error", e.getMessage());
-            return "redirect:/todos/new";
-        }
+        TodoDto todoDto = new TodoDto(null, todo.getTitle(), todo.getContent(), false);
+        todoService.createTodo(todoDto);
+        redirectAttributes.addFlashAttribute("message", "메모가 생성되었습니다.");
+        return "redirect:/todos";
     }
 
     @GetMapping("/{id}")
     public String detail(@PathVariable Long id, Model model) {
-        try {
-            TodoDto todo = todoService.getTodoById(id);
-            model.addAttribute("todo", todo);
+        TodoDto todo = todoService.getTodoById(id);
+        model.addAttribute("todo", todo);
 
-            return "detail";
-        } catch (IllegalArgumentException e) {
-            return "redirect:/todos";
-        }
+        return "detail";
     }
 
     @GetMapping("/{id}/delete")
@@ -70,25 +60,17 @@ public class TodoController {
 
     @GetMapping("/{id}/update")
     public String edit(@PathVariable Long id, Model model) {
-        try {
-            TodoDto todo = todoService.getTodoById(id);
-            model.addAttribute("todo", todo);
+        TodoDto todo = todoService.getTodoById(id);
+        model.addAttribute("todo", todo);
 
-            return "form";
-        } catch (IllegalArgumentException e) {
-            return "redirect:/todos";
-        }
+        return "form";
     }
 
     @PostMapping("/{id}/update")
     public String update(@PathVariable Long id, @ModelAttribute TodoDto todo) {
-        try {
-            todo.setId(id);
-            todoService.updateTodoById(id, todo);
-            return "redirect:/todos/" + id;
-        } catch (IllegalArgumentException e) {
-            return "redirect:/todos/{id}";
-        }
+        todo.setId(id);
+        todoService.updateTodoById(id, todo);
+        return "redirect:/todos/" + id;
     }
 
     @GetMapping("/search")
@@ -120,14 +102,10 @@ public class TodoController {
 
     @GetMapping("/todos/{id}/toggle")
     public String toggle(@PathVariable Long id) {
-        try {
-            TodoDto todo = todoService.getTodoById(id);
-            todo.setCompleted(!todo.isCompleted());
-            todoService.saveTodo(todo);
-            return "redirect:/todos/" + id;
-        } catch (IllegalArgumentException e) {
-            return "redirect:/todos";
-        }
+        TodoDto todo = todoService.getTodoById(id);
+        todo.setCompleted(!todo.isCompleted());
+        todoService.createTodo(todo);
+        return "redirect:/todos/" + id;
     }
 
     // 제목 검증 추가

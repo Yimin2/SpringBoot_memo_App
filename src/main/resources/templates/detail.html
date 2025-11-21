@@ -1,31 +1,195 @@
 <!DOCTYPE html>
-<html lang="en"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/default}">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/default}">
 
 <div layout:fragment="content">
-    <div class="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow-md">
-        <div class="flex justify-between items-start mb-4">
-            <h1 class="text-3xl font-bold text-gray-800" th:text="${todo.title}"></h1>
-            <span th:if="${todo.completed}" class="px-3 py-1 text-sm font-semibold rounded-full bg-green-100 text-green-800">완료</span>
-            <span th:unless="${todo.completed}" class="px-3 py-1 text-sm font-semibold rounded-full bg-yellow-100 text-yellow-800">진행중</span>
-        </div>
-
-        <div class="prose max-w-none text-gray-600 mb-6">
-            <p th:text="${todo.content}"></p>
-        </div>
-
-        <div class="flex items-center justify-end space-x-4">
-            <a th:href="@{/todos/{id}/update(id=${todo.id})}"
-               class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                수정
+    <div class="max-w-4xl mx-auto animate-fade-in-up">
+        <!-- Back Button -->
+        <div class="mb-6">
+            <a href="/todos" class="btn btn-ghost gap-2 rounded-2xl hover:bg-base-200/50 transition-all">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Back to Memos
             </a>
-            <a th:href="@{/todos/{id}/delete(id=${todo.id})}" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-               onclick="return confirm('정말로 삭제하시겠습니까?');">
-                삭제
+        </div>
+
+        <!-- Main Detail Card -->
+        <div class="glass-strong rounded-3xl shadow-2xl border border-white/20 overflow-hidden">
+            <!-- Header Section with Gradient -->
+            <div class="bg-gradient-primary p-8 text-white relative overflow-hidden">
+                <!-- Decorative Background Pattern -->
+                <div class="absolute inset-0 opacity-10">
+                    <div
+                        class="absolute top-0 right-0 w-64 h-64 bg-white rounded-full -translate-y-1/2 translate-x-1/2">
+                    </div>
+                    <div
+                        class="absolute bottom-0 left-0 w-48 h-48 bg-white rounded-full translate-y-1/2 -translate-x-1/2">
+                    </div>
+                </div>
+
+                <div class="relative z-10">
+                    <div class="flex justify-between items-start mb-4">
+                        <div
+                            class="badge badge-lg bg-white/20 border-white/30 text-white font-bold px-4 py-3 backdrop-blur-sm">
+                            <span th:text="${todo.completed} ? '✓ COMPLETED' : '⚡ IN PROGRESS'">STATUS</span>
+                        </div>
+                        <span class="text-white/80 font-mono text-sm font-semibold"
+                            th:text="'ID: #' + ${todo.id}">#123</span>
+                    </div>
+
+                    <h1 class="text-5xl font-black mb-4 leading-tight" th:text="${todo.title}">Memo Title</h1>
+
+                    <!-- Metadata -->
+                    <div class="flex flex-wrap gap-4 text-white/80 text-sm">
+                        <div class="flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            <span>Created recently</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                            </svg>
+                            <span>Memo</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Content Section -->
+            <div class="p-10">
+                <div class="mb-8">
+                    <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 12h16M4 18h7" />
+                        </svg>
+                        Content
+                    </h2>
+                    <div class="prose prose-lg max-w-none">
+                        <p class="text-base-content/80 leading-relaxed text-lg whitespace-pre-wrap"
+                            th:text="${todo.content}">
+                            Memo content will appear here...
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Status Info Card -->
+                <div class="glass rounded-2xl p-6 mb-8 border border-base-200/50">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div class="p-3 rounded-xl"
+                                th:classappend="${todo.completed} ? 'bg-success/10' : 'bg-warning/10'">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8"
+                                    th:classappend="${todo.completed} ? 'text-success' : 'text-warning'" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path th:if="${todo.completed}" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    <path th:unless="${todo.completed}" stroke-linecap="round" stroke-linejoin="round"
+                                        stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="font-semibold text-base-content/60 text-sm">Current Status</p>
+                                <p class="text-xl font-bold"
+                                    th:classappend="${todo.completed} ? 'text-success' : 'text-warning'"
+                                    th:text="${todo.completed} ? 'Completed ✓' : 'In Progress ⚡'">
+                                    Status
+                                </p>
+                            </div>
+                        </div>
+                        <div th:if="${!todo.completed}">
+                            <a th:href="@{/todos/{id}/update(id=${todo.id})}"
+                                class="btn btn-sm btn-success gap-2 rounded-xl">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M5 13l4 4L19 7" />
+                                </svg>
+                                Mark Complete
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Footer with Glassmorphism -->
+            <div class="glass-strong border-t border-white/20 p-6">
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="flex gap-3 order-2 sm:order-1 w-full sm:w-auto">
+                        <a th:href="@{/todos/{id}/update(id=${todo.id})}"
+                            class="btn btn-warning gap-2 rounded-2xl hover:scale-105 transition-all flex-1 sm:flex-none">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                            Edit Memo
+                        </a>
+                        <a th:href="@{/todos/{id}/delete(id=${todo.id})}"
+                            class="btn btn-error gap-2 rounded-2xl hover:scale-105 transition-all flex-1 sm:flex-none"
+                            onclick="return confirm('Are you sure you want to delete this memo? This action cannot be undone.');">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                            Delete
+                        </a>
+                    </div>
+
+                    <div class="text-sm text-base-content/50 order-1 sm:order-2">
+                        <p>Last updated: <span class="font-semibold">Recently</span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions Card -->
+        <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-4 animate-fade-in" style="animation-delay: 0.2s;">
+            <a href="/todos/new"
+                class="glass rounded-2xl p-6 hover:shadow-xl transition-all hover:-translate-y-1 border border-primary/20 group">
+                <div class="flex items-center gap-4">
+                    <div class="p-3 bg-primary/10 rounded-xl group-hover:bg-primary/20 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="font-bold text-base-content">Create New Memo</p>
+                        <p class="text-sm text-base-content/60">Start a fresh memo</p>
+                    </div>
+                </div>
+            </a>
+
+            <a href="/todos"
+                class="glass rounded-2xl p-6 hover:shadow-xl transition-all hover:-translate-y-1 border border-primary/20 group">
+                <div class="flex items-center gap-4">
+                    <div class="p-3 bg-primary/10 rounded-xl group-hover:bg-primary/20 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="font-bold text-base-content">View All Memos</p>
+                        <p class="text-sm text-base-content/60">Browse your collection</p>
+                    </div>
+                </div>
             </a>
         </div>
     </div>
 </div>
+
 </html>

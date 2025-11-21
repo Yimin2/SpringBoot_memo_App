@@ -1,25 +1,46 @@
 package com.ll.todoapp.service;
 
 import com.ll.todoapp.dto.TodoDto;
+import com.ll.todoapp.entity.TodoEntity;
+import com.ll.todoapp.exception.ResourceNotFoundException;
 import com.ll.todoapp.repogitory.TodoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class TodoService {
 
     private final TodoRepository todoRepository;
 
     public List<TodoDto> getAllTodos() {
-        return todoRepository.finAll();
+        return todoRepository.findAll()
+                .stream()
+                .map(TodoDto::from)
+                .collect(Collectors.toList());
+    }
+
+    private TodoEntity findEntityById(Long id) {
+        return todoRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("not found : id" + id));
     }
 
     public TodoDto getTodoById(Long id) {
-        return todoRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("not found : id" + id));
+        TodoEntity entity = findEntityById(id);
+        return TodoDto.from(entity);
+    }
+
+    public TodoDto createTodo(TodoDto dto) {
+        validateTitle(dto.getTitle());
+        TodoEntity entity = TodoEntity.from(dto);
+        TodoEntity saved = todoRepository.save(entity);
+
+        return TodoDto.from(saved);
     }
 
     public void deleteTodoById(Long id) {
@@ -27,32 +48,33 @@ public class TodoService {
         todoRepository.deleteById(id);
     }
 
-    public TodoDto saveTodo(TodoDto todoDto) {
+
+    public TodoDto updateTodoById(Long id, TodoDto todoDto) {
         validateTitle(todoDto.getTitle());
-        return todoRepository.save(todoDto);
-    }
+        TodoEntity todoEntity = findEntityById(id);
 
-    public TodoDto updateTodoById(Long id, TodoDto newTodo) {
-        validateTitle(newTodo.getTitle());
-        TodoDto originTodo = getTodoById(id);
+        TodoEntity updatedEntity = todoEntity.toBuilder()
+                .title(todoDto.getTitle())
+                .content(todoDto.getContent())
+                .completed(todoDto.isCompleted())
+                .build();
 
-        originTodo.setTitle(newTodo.getTitle());
-        originTodo.setContent(newTodo.getContent());
-        originTodo.setCompleted(newTodo.isCompleted());
-
-        return todoRepository.save(originTodo);
+        return TodoDto.from(todoRepository.save(updatedEntity));
     }
 
     public List<TodoDto> searchTodos(String keyword) {
-        return todoRepository.findByTitleContaining(keyword);
+        return todoRepository.findByTitleContaining(keyword)
+                .stream()
+                .map(TodoDto::from)
+                .collect(Collectors.toList());
     }
 
     public List<TodoDto> getTodosByCompleted(boolean completed) {
-        return todoRepository.findByCompleted(completed);
+        return todoRepository.findByCompleted(completed).stream().map(TodoDto::from).collect(Collectors.toList());
     }
 
     public long getTotalCount() {
-        return todoRepository.finAll()
+        return todoRepository.findAll()
                 .size();
     }
 
@@ -77,6 +99,6 @@ public class TodoService {
     }
 
     public void deleteCompleted() {
-        todoRepository.deleteByCompletedTodos();
+        todoRepository.deleteByCompleted(true);
     }
 }
